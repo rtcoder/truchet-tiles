@@ -14,11 +14,7 @@
     const rowsContainer = document.querySelector('.rows-container');
     const rowsCount = Math.ceil(innerHeight / size);
     const columnsCount = Math.ceil(innerWidth / size);
-    // Ustawienie stylów kontenera
-    rowsContainer.style.display = 'flex';
-    rowsContainer.style.flexDirection = 'column';
 
-    // Tworzenie gridu SVG
     for (let i = 0; i < rowsCount; i++) {
         const rowDiv = document.createElement('div');
         rowDiv.classList.add('row');
@@ -29,14 +25,13 @@
             svg.setAttribute('width', size);
             svg.setAttribute('height', size);
 
-            // Tworzymy okrąg w stylu Trocheta
             const circle1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             const circle2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            circle1.setAttribute('cx', j % 2 === 0 ? size : 0); // Zmienia pozycję w zależności od kolumny
-            circle1.setAttribute('cy', i % 2 === 0 ? size : 0); // Zmienia pozycję w zależności od wiersza
+            circle1.setAttribute('cx', j % 2 === 0 ? size : 0);
+            circle1.setAttribute('cy', i % 2 === 0 ? size : 0);
 
-            circle2.setAttribute('cx', j % 2 !== 0 ? size : 0); // Zmienia pozycję w zależności od kolumny
-            circle2.setAttribute('cy', i % 2 !== 0 ? size : 0); // Zmienia pozycję w zależności od wiersza
+            circle2.setAttribute('cx', j % 2 !== 0 ? size : 0);
+            circle2.setAttribute('cy', i % 2 !== 0 ? size : 0);
 
             [circle1, circle2].forEach(c => {
                 c.setAttribute('r', size / 2);
@@ -54,9 +49,8 @@
     }
 
 
-    // Dodajemy jeden listener na `body`
     document.body.addEventListener('click', (event) => {
-        const svg = event.target.closest('svg'); // Sprawdzamy, czy kliknięto w SVG
+        const svg = event.target.closest('svg');
         if (svg) {
             rotateSvg(svg)
         }
@@ -68,20 +62,17 @@
         svg.style.transform = `rotate(${rotation}deg)`;
     }
 
-    // Funkcja do losowego obrotu 20 SVG co sekundę
     function rotateRandomSVGs() {
-        const svgs = document.querySelectorAll('svg'); // Pobieramy wszystkie SVG
+        const svgs = document.querySelectorAll('svg');
         const randomSVGs = Array.from(svgs)
-            .sort(() => Math.random() - 0.5) // Mieszamy elementy w tablicy
-            .slice(0, 150); // Wybieramy 20 losowych
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 150);
 
         randomSVGs.forEach(rotateSvg);
         setTimeout(()=>{
             requestAnimationFrame(rotateRandomSVGs)
         },1000)
     }
-
-    // Ustawienie interwału do losowego obracania SVG co sekundę
     rotateRandomSVGs()
 </script>
 </body>
