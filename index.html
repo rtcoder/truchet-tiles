@@ -3,66 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <style>
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
-
-      .rows-container {
-          display: flex;
-          flex-direction: column;
-          width: 100vw;
-          height: 100vh;
-          --cellSize: 64px;
-      }
-
-      .row {
-          overflow: hidden;
-          display: flex;
-          height: fit-content;
-      }
-
-      .row > .cell {
-          /*border: 1px solid #ccc;*/
-          flex: 0 0 var(--cellSize);
-          aspect-ratio: 1 / 1;
-          position: relative;
-          overflow: hidden;
-      }
-
-
-      .cell::before,
-      .cell::after {
-          content: '';
-          position: absolute;
-          border: 5px solid #000;
-          width: calc(var(--cellSize) * 1.5); /* Zwiększamy rozmiar koła */
-          aspect-ratio: 1 / 1;
-          border-radius: 50%; /* Ustawienie na okrąg */
-          box-sizing: border-box;
-          transform-origin: center;
-      }
-
-      .cell::before {
-          top: -25%; /* Przesunięcie, aby zająć część komórki */
-          left: -25%;
-          transform: translate(-25%, -25%);
-      }
-
-      .cell::after {
-          top: 50%; /* Przesunięcie w dół i w prawo */
-          left: 50%;
-          transform: translate(-50%, -50%);
-          border-color: #09c;
-      }
-
-      svg {
-          overflow: hidden;
-          transition: transform 500ms ease;
-      }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="rows-container"></div>

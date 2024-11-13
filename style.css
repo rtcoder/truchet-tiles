@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.rows-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    --cellSize: 64px;
+}
+
+.row {
+    overflow: hidden;
+    display: flex;
+    height: fit-content;
+}
+
+svg {
+    overflow: hidden;
+    transition: transform 500ms ease;
+}
