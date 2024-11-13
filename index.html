@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      .rows-container {
+          display: flex;
+          flex-direction: column;
+          width: 100vw;
+          height: 100vh;
+          --cellSize: 64px;
+      }
+
+      .row {
+          overflow: hidden;
+          display: flex;
+          height: fit-content;
+      }
+
+      .row > .cell {
+          /*border: 1px solid #ccc;*/
+          flex: 0 0 var(--cellSize);
+          aspect-ratio: 1 / 1;
+          position: relative;
+          overflow: hidden;
+      }
+
+
+      .cell::before,
+      .cell::after {
+          content: '';
+          position: absolute;
+          border: 5px solid #000;
+          width: calc(var(--cellSize) * 1.5); /* Zwiększamy rozmiar koła */
+          aspect-ratio: 1 / 1;
+          border-radius: 50%; /* Ustawienie na okrąg */
+          box-sizing: border-box;
+          transform-origin: center;
+      }
+
+      .cell::before {
+          top: -25%; /* Przesunięcie, aby zająć część komórki */
+          left: -25%;
+          transform: translate(-25%, -25%);
+      }
+
+      .cell::after {
+          top: 50%; /* Przesunięcie w dół i w prawo */
+          left: 50%;
+          transform: translate(-50%, -50%);
+          border-color: #09c;
+      }
+
+      svg {
+          overflow: hidden;
+          transition: transform 500ms ease;
+      }
+  </style>
+</head>
+<body>
+<div class="rows-container"></div>
+
+<script>
+    const {innerWidth, innerHeight} = window;
+    const size = 64;
+    const rowsContainer = document.querySelector('.rows-container');
+    const rowsCount = Math.ceil(innerHeight / size);
+    const columnsCount = Math.ceil(innerWidth / size);
+    // Ustawienie stylów kontenera
+    rowsContainer.style.display = 'flex';
+    rowsContainer.style.flexDirection = 'column';
+
+    // Tworzenie gridu SVG
+    for (let i = 0; i < rowsCount; i++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+        rowDiv.style.display = 'flex';
+
+        for (let j = 0; j < columnsCount; j++) {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+
+            // Tworzymy okrąg w stylu Trocheta
+            const circle1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            const circle2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle1.setAttribute('cx', j % 2 === 0 ? size : 0); // Zmienia pozycję w zależności od kolumny
+            circle1.setAttribute('cy', i % 2 === 0 ? size : 0); // Zmienia pozycję w zależności od wiersza
+
+            circle2.setAttribute('cx', j % 2 !== 0 ? size : 0); // Zmienia pozycję w zależności od kolumny
+            circle2.setAttribute('cy', i % 2 !== 0 ? size : 0); // Zmienia pozycję w zależności od wiersza
+
+            [circle1, circle2].forEach(c => {
+                c.setAttribute('r', size / 2);
+                c.setAttribute('stroke', '#000');
+                c.setAttribute('stroke-width', 4);
+                c.setAttribute('fill', 'none');
+            });
+
+            svg.setAttribute('data-rotation', 0);
+            svg.appendChild(circle1);
+            svg.appendChild(circle2);
+            rowDiv.appendChild(svg);
+        }
+        rowsContainer.appendChild(rowDiv);
+    }
+
+
+    // Dodajemy jeden listener na `body`
+    document.body.addEventListener('click', (event) => {
+        const svg = event.target.closest('svg'); // Sprawdzamy, czy kliknięto w SVG
+        if (svg) {
+            rotateSvg(svg)
+        }
+    });
+    function rotateSvg(svg){
+        let rotation = parseInt(svg.getAttribute('data-rotation')) || 0;
+        rotation = rotation > 0 ? 0 : 90;
+        svg.setAttribute('data-rotation', rotation);
+        svg.style.transform = `rotate(${rotation}deg)`;
+    }
+
+    // Funkcja do losowego obrotu 20 SVG co sekundę
+    function rotateRandomSVGs() {
+        const svgs = document.querySelectorAll('svg'); // Pobieramy wszystkie SVG
+        const randomSVGs = Array.from(svgs)
+            .sort(() => Math.random() - 0.5) // Mieszamy elementy w tablicy
+            .slice(0, 150); // Wybieramy 20 losowych
+
+        randomSVGs.forEach(rotateSvg);
+        setTimeout(()=>{
+            requestAnimationFrame(rotateRandomSVGs)
+        },1000)
+    }
+
+    // Ustawienie interwału do losowego obracania SVG co sekundę
+    rotateRandomSVGs()
+</script>
+</body>
+</html>
